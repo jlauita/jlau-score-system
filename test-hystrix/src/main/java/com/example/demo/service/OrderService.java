@@ -24,15 +24,15 @@ public class OrderService {
     })
     public String findOrderById(String id) throws InterruptedException{
         long timemills = 3000;
-        return "淘宝订单Id:2109jr09f8h2r1";
+        return "淘宝订单Id:1235782950订单";
     }
-    /*@HystrixCommand(commandKey = "skill",fallbackMethod = "fallback",threadPoolProperties = {
-            @HystrixProperty(name = "coreSize",value = "100"),
-            @HystrixProperty(name = "maxQueueSize",value = "300")
+    @HystrixCommand(commandKey = "skill",fallbackMethod = "fallback",threadPoolProperties = {
+            @HystrixProperty(name = "coreSize",value = "20"),
+            @HystrixProperty(name = "maxQueueSzie",value = "30")
     },commandProperties = {
-            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold",value = "100"),
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds",value = "2000")
-    })*/
+            @HystrixProperty(name="circuitBreak.requestVolumeThreshold",value="20"),
+            @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds",value ="2000")
+    })
     public String skill(String id){
         RedisDistributedLock distributedLock = new RedisDistributedLock(redisTemplate);
         String key = "order";
