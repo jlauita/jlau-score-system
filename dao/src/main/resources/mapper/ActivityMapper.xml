@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jlau.scoresystem.dao.ActivityMapper">
+    <resultMap id="activity" type="Activity">
+        <id property="id" column="perform_id" />
+        <result property="studentId" column="number" />
+        <result property="activityName" column="activity" />
+        <result property="grade" column="grade" />
+        <result property="typeId" column="three_id" />
+        <result property="schoolYear" column="year" />
+        <result property="term" column="xq" />
+        <result property="note" column="temp" />
+        <result property="createTime" column="create_time" />
+        <result property="cadreId" column="upload_id" />
+        <result property="cadreName" column="examine" />
+    </resultMap>
+    <sql id="activityInfo">
+        perform_id,number,activity,grade,three_id,year,xq,temp,create_time,upload_id,examine
+    </sql>
+    <select id="findAllActivity" resultMap="activity">
+        SELECT
+        <include refid="activityInfo" />
+        FROM perform
+    </select>
+    <select id="findActivityType" resultType="java.lang.String">
+        SELECT three_name FROM three
+        <where>
+            three_id = #{typeId}
+        </where>
+    </select>
+    <select id="findActivityByStudentId" resultMap="activity">
+        SELECT
+        <include refid="activityInfo" />
+        FROM perform
+        <where>
+            <if test="studentId != null and studentId != '' ">
+                number = #{studentId}
+            </if>
+        </where>
+    </select>
+    <update id="saveActivity" parameterType="activity">
+        UPDATE perform
+        <set>
+            <if test="activityName != null and activityName != '' ">
+                activity = #{activityName},
+            </if>
+            <if test="grade != null and grade != ''">
+                grade = #{grade},
+            </if>
+            <if test="typeId != null and typeId != ''">
+                three_id = #{typeId},
+            </if>
+            <if test="schoolYear = null">
+                year = #{schoolYear},
+            </if>
+            <if test="term != null and term != ''">
+                xq = #{term},
+            </if>
+            <if test="note != null and note != ''">
+                temp = #{note},
+            </if>
+            <if test="cadreId  != null and cadreId != ''">
+                upload_id = #{cadreId},
+            </if>
+            <if test="cadreName != null and cadreName != ''">
+                examine = #{cadreName},
+            </if>
+        </set>
+        <where>
+            perform_id = #{id}
+        </where>
+    </update>
+    <insert id="addActivity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO perform(
+            number,
+            activity,
+            grade,
+            three_id,
+            year,
+            xq,
+            temp,
+            create_time,
+            upload_id,
+            examine,
+            examine_id,
+            status
+        )
+        VALUE(
+            #{studentId},
+            #{activityName},
+            #{grade},
+            #{typeId},
+            #{schoolYear},
+            #{term},
+            #{note},
+            #{createTime},
+            #{cadreId},
+            #{cadreName},
+            #{privilegeUserId},
+            #{status}
+        )
+    </insert>
+    <delete id="deleteActivityById" parameterType="int">
+        DELETE FROM perform
+        <where>
+            perform_id = #{id}
+        </where>
+    </delete>
+</mapper>

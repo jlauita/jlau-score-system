@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jlau.scoresystem.dao.OauthClientDetailsMapper">
+    <resultMap id="OauthClientDetails" type="OauthClientDetails">
+        <id property="clientId" column="client_id" />
+        <result property="resourceIds" column="resource_ids" />
+        <result property="clientSecret" column="client_secret" />
+        <result property="scope" column="scope" />
+        <result property="authorizedGrantTypes" column="authorized_grant_types" />
+        <result property="webServerRedirectUri" column="web_server_redirect_uri" />
+        <result property="authorities" column="authorities" />
+        <result property="accessTokenValidity" column="access_token_validity" />
+        <result property="refreshTokenValidity" column="refresh_token_validity" />
+        <result property="additionalInformation" column="additional_information" />
+        <result property="autoApprove" column="autoapprove" />
+    </resultMap>
+    <select id="findClientDetailsById" resultMap="OauthClientDetails">
+        SELECT * FROM oauth_client_details
+        <where>
+            client_id = #{clientId}
+        </where>
+    </select>
+    <select id="findAllClientDetails" resultMap="OauthClientDetails">
+        SELECT * FROM oauth_client_details
+    </select>
+    <insert id="addClientDetails" parameterType="OauthClientDetails">
+        INSERT INTO oauth_client_details(
+          client_id,
+          resource_ids,
+          client_secret,
+          scope,
+          authorized_grant_types,
+          web_server_redirect_uri,
+          authorities,
+          access_token_validity,
+          refresh_token_validity,
+          additional_information,
+          autoapprove
+        )
+        VALUES(
+          #{clientId},
+          #{resourceIds},
+          #{clientSecret},
+          #{scope},
+          #{authorizedGrantTypes},
+          #{webServerRedirectUri},
+          #{authorities},
+          #{accessTokenValidity},
+          #{refreshTokenValidity},
+          #{additionalInformation},
+          #{autoApprove}
+        )
+    </insert>
+    <update id="saveClientDetails" parameterType="OauthClientDetails">
+        UPDATE client_details
+        <set>
+            resource_ids = #{resourceIds},
+            client_secret = #{clientSecret},
+            scope = #{scope}
+            authorized_grant_types = #{authorizedGrantTypes},
+            web_server_redirect_uri = #{webServerRedirectUri},
+            authorities = #{authorities},
+            access_token_validity = #{accessTokenValidity},
+            refresh_token_validity = #{refreshTokenValidity},
+            additional_information = #{additionalInformation}
+            autoapprove = #{autoApprove}
+        </set>
+        <where>
+            client_id = #{clientId}
+        </where>
+    </update>
+    <delete id="deleteClientDetailsById" parameterType="java.lang.String">
+        DELETE FROM client_details
+        <where>
+            client_id = #{clientId}
+        </where>
+    </delete>
+</mapper>

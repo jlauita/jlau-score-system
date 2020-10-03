@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jlau.scoresystem.dao.ApplyMapper">
+    <resultMap id="apply" type="Apply">
+        <id property="id" column="apply_id" />
+        <result property="studentId" column="student_id" />
+        <result property="reason" column="act_name" />
+        <result property="grade" column="grade" />
+        <result property="descrip" column="act_script" />
+        <result property="phone" column="phone" />
+        <result property="stuffPath" column="jpg" />
+        <result property="type" column="com_id" />
+        <result property="createTime" column="create_time" />
+        <result property="result" column="result" />
+        <result property="status" column="stat" />
+    </resultMap>
+    <sql id="applyInfo">
+        apply_id,student_id,act_name,grade,act_script,phone,jpg,com_id,create_time,result,stat
+    </sql>
+    <select id="findApplyById" resultMap="apply">
+        SELECT
+        <include refid="applyInfo" />
+        FROM apply
+        <where>
+            apply_id = #{id}
+        </where>
+    </select>
+    <select id="findAllApply" resultMap="apply">
+        SELECT
+        <include refid="applyInfo" />
+        FROM apply
+    </select>
+    <select id="findApplyByStudentId" parameterType="int" resultMap="apply">
+        SELECT
+        <include refid="applyInfo" />
+        FROM apply
+        <where>
+            student_id = #{studentId}
+        </where>
+    </select>
+    <insert id="addApply" parameterType="Apply" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO apply(
+            student_id,
+            act_name,
+            grade,
+            act_script,
+            phone,
+            jpg,
+            com_id,
+            create_time,
+            result,
+            stat)
+        VALUES(
+            #{studentId},
+            #{reason},
+            #{grade},
+            #{descrip},
+            #{phone},
+            #{stuffPath},
+            #{type},
+            #{createTime},
+            #{result},
+            #{status}
+        )
+    </insert>
+    <update id="saveApply" parameterType="Apply">
+        UPDATE apply
+        <set>
+            <if test="studentId != null and studentId != '' ">
+                student_id = #{studentId},
+            </if>
+            <if test="reason != null and reason != '' ">
+                act_name = #{reason},
+            </if>
+            <if test="grade != null and grade != '' ">
+                grade = #{grade},
+            </if>
+            <if test="descrip != null and descrip != '' ">
+                act_script = #{descrip},
+            </if>
+            <if test="phone != null and phone != '' ">
+                phone = #{phone},
+            </if>
+            <if test="stuffPath != null and stuffPath != '' ">
+                jpg = #{stuffPath},
+            </if>
+            <if test="type != null and type != '' ">
+                com_id = #{type},
+            </if>
+            <if test="createTime != null and createTime != '' ">
+                create_time = #{createTime},
+            </if>
+            <if test="result != null and result != '' ">
+                result = #{result},
+            </if>
+            <if test="status != null and status != '' ">
+                stat = #{status},
+            </if>
+        </set>
+        <where>
+            apply_id = #{id}
+        </where>
+    </update>
+    <delete id="deleteApplyById" parameterType="int">
+        DELETE FROM apply
+        <where>
+            apply_id = #{id}
+        </where>
+    </delete>
+</mapper>

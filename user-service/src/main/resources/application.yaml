@@ -1,0 +1,24 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/user
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8848/eureka
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:8081/user/info
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.jlau.scoresystem.model

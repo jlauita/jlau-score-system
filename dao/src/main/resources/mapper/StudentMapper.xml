@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jlau.scoresystem.dao.StudentMapper">
+    <resultMap id="student" type="Student">
+        <id property="studentId" column="student_id" />
+        <result property="studentName" column="student_name" />
+        <result property="gender" column="gender" />
+        <result property="phone" column="phone" />
+        <result property="nationality" column="nationality" />
+        <result property="political" column="political_status" />
+        <result property="academic" column="academic" />
+        <result property="major" column="zy" />
+        <result property="yid" column="yid" />
+    </resultMap>
+    <sql id="studentInfo">
+        student_id,student_name,gender,phone,nationality,political_status,academic,zy,yid
+    </sql>
+    <select id="findStudentByStudentId" resultMap="student" parameterType="int">
+        SELECT
+        <include refid="studentInfo" />
+        FROM student WHERE student_id = #{studentId}
+    </select>
+    <select id="findAllStudent" resultMap="student">
+        SELECT
+        <include refid="studentInfo" />
+        FROM student
+    </select>
+    <insert id="addStudent" parameterType="student">
+        INSERT INTO student(student_id,student_name,gender,phone,nationality,political_status,academic,zy,yid)
+        VALUE(#{studentId},#{studentName},#{gender},#{phone},#{nationality},#{political},#{academic},#{major},#{yid})
+    </insert>
+    <update id="saveStudent" parameterType="student">
+        UPDATE student
+        <set>
+            <if test="studentName != null and studentName != '' ">
+                student_name = #{studentName},
+            </if>
+            <if test="gender != null and gender != '' ">
+                gender = #{gender},
+            </if>
+            <if test="phone != null and phone != '' ">
+                phone = #{phone},
+            </if>
+            <if test="nationality != null and nationality != '' ">
+                nationality = #{nationality},
+            </if>
+            <if test="political != null and political != '' ">
+                political_status = #{political},
+            </if>
+            <if test="academic != null and academic != '' ">
+                academic = #{academic},
+            </if>
+            <if test="major != null and major != '' ">
+                zy = #{major},
+            </if>
+            <if test="yid != null and yid != '' ">
+                yid = #{yid},
+            </if>
+        </set>
+        <where>
+            <if test="studentId != null and studentId != '' ">
+                AND student_id = #{studentId}
+            </if>
+        </where>
+    </update>
+    <delete id="deleteStudentByStudentId" parameterType="int">
+        DELETE FROM student
+        <where>
+            <if test="studentId != null and student != '' ">
+                student_id = #{studentId}
+            </if>
+        </where>
+    </delete>
+</mapper>

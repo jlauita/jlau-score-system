@@ -1,0 +1,31 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: score-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/user
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.jlau.scoresystem.model
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8848/eureka
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:8081/user/info
+    client:
+      client-id: score-client
+      client-secret: 8848@
+      access-token-uri: http://localhost:8081/oauth/token
+      grant-type: password
+      scope: all
+

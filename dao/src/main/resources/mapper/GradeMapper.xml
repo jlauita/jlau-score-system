@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jlau.scoresystem.dao.GradeMapper">
+    <resultMap id="grade" type="Grade">
+        <id property="id" column="id" />
+        <result property="studentId" column="student_id" />
+        <result property="sumExamScore" column="sum_g1" />
+        <result property="sumEvaluateScore" column="sum_g2" />
+        <result property="finalScore" column="sum_g12" />
+        <result property="createTime" column="time"/>
+        <result property="schoolYear" column="year" />
+        <result property="term" column="xq"/>
+    </resultMap>
+    <sql id="gradeInfo">
+        student_id,sum_g1,sum_g2,sum_g12,time,year,xq
+    </sql>
+    <select id="findGradeByStudentId" resultMap="grade" parameterType="int">
+        SELECT
+        <include refid="gradeInfo" />
+        FROM grade
+        <where>
+            AND student_id = #{studentId}
+        </where>
+    </select>
+    <select id="findGradeByStudentIdAndYearAndTerm" resultMap="grade" parameterType="int">
+        SELECT
+        <include refid="gradeInfo" />
+        FROM grade
+        <where>
+            AND student_id = #{studentId}
+            AND year = #{schoolYear}
+            AND xq = #{term}
+        </where>
+    </select>
+    <select id="findAllGrade" resultMap="grade">
+        SELECT
+        <include refid="gradeInfo" />
+        FROM grade
+    </select>
+
+    <update id="saveGrade" parameterType="Grade">
+        UPDATE grade
+        <set>
+            <if test="sumExamScore != null">
+                sum_g1 = #{sumExamScore},
+            </if>
+            <if test="sumEvaluateScore != null">
+                sum_g2 = #{sumEvaluateScore},
+            </if>
+            <if test="finalScore != null">
+                sum_g12 = #{finalScore},
+            </if>
+            <if test="createTime != null">
+                time = #{createTime},
+            </if>
+            <if test="schoolYear != null">
+                year = #{schoolYear},
+            </if>
+            <if test="term != null">
+                xq = #{term}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <insert id="addGrade" parameterType="Grade" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO grade(
+        <include refid="gradeInfo" />
+        )
+        VALUE(
+            #{studentId},
+            #{sumExamScore},
+            #{sumEvaluateScore},
+            #{finalScore},
+            #{createTime},
+            #{schoolYear},
+            #{term}
+        )
+    </insert>
+    <delete id="deleteGradeById" parameterType="int">
+        DELETE FROM grade
+        <where>
+            AND id = #{id}
+        </where>
+    </delete>
+</mapper>
