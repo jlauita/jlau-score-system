@@ -46,11 +46,17 @@ public class ApplyService {
         return result;
     }
     public void handleApplyUpload(MultipartFile file,Apply apply) throws Exception{
-        String extensionName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-        String fileName = UUID.randomUUID()+extensionName;
-        apply.setStuffPath(fileName);
-        apply.setCreateTime(new Date().toString());
-        addApply(apply);
-        FileUploadUtils.upload(file,fileName,FileUploadUtils.FileExtension.IMAGE_EXT);
+        if(!file.isEmpty()) {
+            String extensionName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            String fileName = UUID.randomUUID() + extensionName;
+            apply.setStuffPath(fileName);
+            apply.setCreateTime(new Date().toString());
+            addApply(apply);
+            FileUploadUtils.upload(file, fileName, FileUploadUtils.FileExtension.IMAGE_EXT);
+        }else{
+            apply.setStuffPath("");
+            apply.setCreateTime(new Date().toString());
+            addApply(apply);
+        }
     }
 }

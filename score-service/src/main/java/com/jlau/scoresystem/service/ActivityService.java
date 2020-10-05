@@ -49,11 +49,13 @@ public class ActivityService {
         int result = activityMapper.deleteActivityById(Integer.valueOf(id));
         return result;
     }
-    public void handleActivityUpload(MultipartFile file,Activity activity)throws Exception{
+    public void handleActivityUpload(MultipartFile file)throws Exception{
+        if(file.isEmpty()){
+            throw new Exception("文件不能为空");
+        }
         String extensionName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         String fileName = UUID.randomUUID()+extensionName;
-        activity.setCreateTime(new Date().toString());
-        addActivity(activity);
         FileUploadUtils.upload(file,fileName,FileUploadUtils.FileExtension.XLSX_EXT);
+        //这里开始读取excel的内容开始添加活动activity
     }
 }

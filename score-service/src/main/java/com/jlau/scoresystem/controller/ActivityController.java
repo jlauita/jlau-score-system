@@ -45,8 +45,8 @@ public class ActivityController {
         return ResultModel.ok();
     }
     @PostMapping("/activity/upload")
-    public Object uploadActivity(@RequestParam("file") MultipartFile file,Activity activity) throws Exception{
-        activityService.handleActivityUpload(file,activity);
+    public Object uploadActivity(@RequestParam("file") MultipartFile file) throws Exception{
+        activityService.handleActivityUpload(file);
         return ResultModel.ok("文件上传成功");
     }
 }
