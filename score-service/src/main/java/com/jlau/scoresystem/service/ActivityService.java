@@ -2,10 +2,18 @@ package com.jlau.scoresystem.service;
 
 import com.jlau.scoresystem.dao.ActivityMapper;
 import com.jlau.scoresystem.model.Activity;
+import com.jlau.scoresystem.utils.FileUploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.List;
 
 /**
@@ -16,6 +24,9 @@ import java.util.List;
 public class ActivityService {
     @Autowired
     private ActivityMapper activityMapper;
+    @Value("${file.path}")
+    private String path;
+
     public List findActivityByStudentId(String studentId) throws NumberFormatException{
         List activities = activityMapper.findActivityByStudentId(Integer.valueOf(studentId));
         return activities;
@@ -36,5 +47,12 @@ public class ActivityService {
         int result = activityMapper.deleteActivityById(Integer.valueOf(id));
         return result;
     }
-
+    public void handleExcel(MultipartHttpServletRequest request)throws Exception{
+        List<MultipartFile> multipartFiles = request.getFiles("file");
+        if(multipartFiles.size() == 0) {
+            throw new  Exception("Empty Files");
+        }
+        MultipartFile file = multipartFiles.get(0);
+        FileUploadUtils.upload(file,path,FileUploadUtils.FileExtension.IMAGE_EXT);
+    }
 }

@@ -23,9 +23,8 @@ public class RedisDistributedLock {
         long timeout = System.currentTimeMillis()+acquiredTimeout;
         String acquiredLock = null;
         while(System.currentTimeMillis() < timeout){
-            if(redisTemplate.opsForValue().setIfAbsent(lockName,identifier)){
+            if(redisTemplate.opsForValue().setIfAbsent(lockName,identifier,expire,TimeUnit.MILLISECONDS)){
                 acquiredLock = identifier;
-                redisTemplate.expire(keyName,expire, TimeUnit.MILLISECONDS);
                 return acquiredLock;
             }
             if(redisTemplate.getExpire(lockName) == -1){
