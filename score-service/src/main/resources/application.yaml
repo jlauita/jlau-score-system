@@ -29,3 +29,6 @@ security:
       grant-type: password
       scope: all
 
+file:
+  path: /var/score-system/picture
+

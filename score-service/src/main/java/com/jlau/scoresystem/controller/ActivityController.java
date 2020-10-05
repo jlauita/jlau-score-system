@@ -5,7 +5,10 @@ import com.jlau.scoresystem.service.ActivityService;
 import com.jlau.scoresystem.vo.ResultModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -39,5 +42,11 @@ public class ActivityController {
     public Object deleteActivityById(@PathVariable("id") String id){
         activityService.deleteActivityById(id);
         return ResultModel.ok();
+    }
+    @PostMapping("/activity/file")
+    public Object readActivityExcel(HttpServletRequest request) throws Exception{
+        MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)request;
+        activityService.handleExcel(multipartHttpServletRequest);
+        return ResultModel.ok("文件上传成功");
     }
 }

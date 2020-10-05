@@ -48,6 +48,6 @@ public class OrderService {
         }
     }
     public String fallback(String name,Throwable e){
-        return "请求繁忙，请稍后再尝试...\n"+name+"  "+e.getMessage();
+        return "请求繁忙，开始熔断...\n"+name+"  "+e.getMessage();
     }
 }
