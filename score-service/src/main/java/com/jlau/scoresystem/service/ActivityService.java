@@ -14,7 +14,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by cxr1205628673 on 2020/9/18.
@@ -47,12 +49,11 @@ public class ActivityService {
         int result = activityMapper.deleteActivityById(Integer.valueOf(id));
         return result;
     }
-    public void handleExcel(MultipartHttpServletRequest request)throws Exception{
-        List<MultipartFile> multipartFiles = request.getFiles("file");
-        if(multipartFiles.size() == 0) {
-            throw new  Exception("Empty Files");
-        }
-        MultipartFile file = multipartFiles.get(0);
-        FileUploadUtils.upload(file,path,FileUploadUtils.FileExtension.IMAGE_EXT);
+    public void handleActivityUpload(MultipartFile file,Activity activity)throws Exception{
+        String extensionName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        String fileName = UUID.randomUUID()+extensionName;
+        activity.setCreateTime(new Date().toString());
+        addActivity(activity);
+        FileUploadUtils.upload(file,fileName,FileUploadUtils.FileExtension.XLSX_EXT);
     }
 }

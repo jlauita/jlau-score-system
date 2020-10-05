@@ -4,6 +4,7 @@ import com.jlau.scoresystem.model.Activity;
 import com.jlau.scoresystem.service.ActivityService;
 import com.jlau.scoresystem.vo.ResultModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -29,12 +30,12 @@ public class ActivityController {
         return ResultModel.ok("ok",activites);
     }
     @PostMapping("/activity/save")
-    public Object saveActivity(@RequestBody Activity activity){
+    public Object saveActivity(@RequestBody @Validated Activity activity){
         activityService.saveActivity(activity);
         return ResultModel.ok();
     }
     @PostMapping("/activity/add")
-    public Object addActivity(@RequestBody Activity activity){
+    public Object addActivity(@RequestBody @Validated Activity activity){
         activityService.addActivity(activity);
         return ResultModel.ok();
     }
@@ -43,10 +44,9 @@ public class ActivityController {
         activityService.deleteActivityById(id);
         return ResultModel.ok();
     }
-    @PostMapping("/activity/file")
-    public Object readActivityExcel(HttpServletRequest request) throws Exception{
-        MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)request;
-        activityService.handleExcel(multipartHttpServletRequest);
+    @PostMapping("/activity/upload")
+    public Object uploadActivity(@RequestParam("file") MultipartFile file,Activity activity) throws Exception{
+        activityService.handleActivityUpload(file,activity);
         return ResultModel.ok("文件上传成功");
     }
 }

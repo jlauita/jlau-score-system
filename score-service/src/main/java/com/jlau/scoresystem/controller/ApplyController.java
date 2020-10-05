@@ -4,8 +4,12 @@ import com.jlau.scoresystem.model.Apply;
 import com.jlau.scoresystem.service.ApplyService;
 import com.jlau.scoresystem.vo.ResultModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -27,12 +31,12 @@ public class ApplyController {
         return ResultModel.ok("ok",applys);
     }
     @PostMapping("/apply/add")
-    public Object addApply(@RequestBody Apply apply){
+    public Object addApply(@RequestBody @Validated Apply apply){
         applyService.addApply(apply);
         return ResultModel.ok();
     }
     @PostMapping("/apply/save")
-    public Object saveApply(@RequestBody Apply apply){
+    public Object saveApply(@RequestBody @Validated Apply apply){
         applyService.saveApply(apply);
         return ResultModel.ok();
     }
@@ -40,5 +44,10 @@ public class ApplyController {
     public Object deleteApply(@PathVariable("id")String id){
         applyService.deleteApplyById(id);
         return ResultModel.ok();
+    }
+    @PostMapping("/apply/upload")
+    public Object uploadApply(@RequestParam("file") MultipartFile file, Apply apply) throws Exception{
+        applyService.handleApplyUpload(file,apply);
+        return ResultModel.ok("上传成功");
     }
 }
