@@ -18,6 +18,7 @@ public class Activity implements Serializable{
     private String activityName;
     @Range(min = -100,max = 100)
     private int grade;
+    @Range(min = 1,max = 23,message = "类型id必须在1到23之间")
     private int typeId;
     @NotNull(message = "学年不能为空")
     private int schoolYear;

@@ -25,11 +25,11 @@ public class FileUploadUtils {
     private static boolean checkExtension(MultipartFile file,String... ext){
         if(file.getOriginalFilename().contains(".")){
             for (String e:ext) {
-                if (!file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1).equals(e)) {
-                    return false;
+                if (file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1).equals(e)) {
+                    return true;
                 }
             }
-            return true;
+            return false;
         }else{
             return false;
         }

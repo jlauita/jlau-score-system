@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.sql.DataSource;
@@ -61,7 +62,8 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(manager)
                  //.userDetailsService(userDetailsService)
-                 .tokenStore(new RedisTokenStore(redisConnectionFactory))
+                //.tokenStore(new RedisTokenStore(redisConnectionFactory)) redis存储token
+                 .tokenStore(new JdbcTokenStore(dataSource))
                  .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
     }
     @Bean
@@ -76,7 +78,7 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setAccessTokenValiditySeconds(24*3600);
         defaultTokenServices.setRefreshTokenValiditySeconds(24*3600);
-        defaultTokenServices.setTokenStore(new RedisTokenStore(redisConnectionFactory));
+        defaultTokenServices.setTokenStore(new JdbcTokenStore(dataSource));
         return defaultTokenServices;
     }
 }
